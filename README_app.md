@@ -7,7 +7,7 @@ GNU AFFERO GENERAL PUBLIC LICENSE v3
 
 ### Citation
 
-Commenges H. **SimulatR : simuler les situations d'inférence avec R**, UMR 8504 Géographie-cités.
+Commenges H. (2016) **SimulatR : simuler les situations d'inférence avec R**, UMR 8504 Géographie-cités.
 [![DOI](https://zenodo.org/badge/69283925.svg)](https://zenodo.org/badge/latestdoi/69283925)
 
 ------

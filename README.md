@@ -3,6 +3,7 @@
 [![DOI](https://zenodo.org/badge/69283925.svg)](https://zenodo.org/badge/latestdoi/69283925)
 
 ## Description
+
 Outil interactif permettant de simuler les situations d'inférence.
 
 ## License
@@ -11,7 +12,7 @@ GNU AFFERO GENERAL PUBLIC LICENSE v3
 
 ## Citation
 
-Commenges H. **SimulatR : simuler les situations d'inférence avec R**, UMR 8504 Géographie-cités, DOI: 10.5281/zenodo.157162
+Commenges H. (2016) **SimulatR : simuler les situations d'inférence avec R**, UMR 8504 Géographie-cités, DOI: 10.5281/zenodo.157162
 
 
 ## Utilisation
