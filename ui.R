@@ -41,7 +41,7 @@ shinyUI(fluidPage(
                              fluidRow(column(3,
                                              sliderInput("varlevcomp", label = "Variabilité (écart-type)", min = 0, max = 20, value = 10, step = 1)),
                                       column(3,
-                                             sliderInput("sampsizecomp", label = "Taille de l'échantillon", min = 10, max = 999, value = 100, step = 1)),
+                                             sliderInput("sampsizecomp", label = "Taille de l'échantillon", min = 10, max = 499, value = 50, step = 1)),
                                       column(1,
                                              actionButton("getonecomp", label = "1 tirage")),
                                       column(1, 
