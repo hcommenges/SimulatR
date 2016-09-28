@@ -1,6 +1,7 @@
 
 # load packages ----
 
+library(shinythemes)
 library(vcd)
 library(RColorBrewer)
 library(reshape2)
@@ -24,6 +25,15 @@ theme_nothing <- function(base_size = 12, base_family = "Helvetica"){
         legend.position = "none"
   )
 }
+
+
+ScaleRnorm <- function(n, mu, sigma){
+  x <- rnorm(n = n, mean = mu, sd = sigma)
+  xDisp <- sigma * x / sd(x)
+  xScaled <- xDisp - mean(xDisp) + mu
+  return(xScaled)
+}
+
 
 
 # mean estimation ----
@@ -59,7 +69,7 @@ PlotPopMean <- function(df){
   popPlot <- ggplot(df) + 
     geom_point(aes(X, Y, size = TAILLE), color = "firebrick") +
     #scale_color_manual(values = c("chocolate", "chartreuse4")) +
-    scale_size_continuous(range = c(1, 10)) +
+    scale_size_continuous(range = c(0.5, 6)) +
     coord_equal() + theme_nothing()
   return(popPlot)
 }
@@ -69,7 +79,7 @@ PlotOneSampleMean <- function(df, sampone, val){
   sampPlot <- ggplot() + 
     geom_point(data = df, aes(X, Y, size = TAILLE), color = "grey70") +
     geom_point(data = df[sampone, ], aes(X, Y, size = TAILLE), color = "firebrick") +
-    scale_size_continuous(range = c(1, 10)) +
+    scale_size_continuous(range = c(0.5, 6)) +
     coord_equal() + theme_nothing()
   return(sampPlot)
 }
@@ -149,7 +159,7 @@ PlotPopComp <- function(df){
   popPlot <- ggplot(df) + 
     geom_point(aes(X, Y, size = TAILLE, color = COULEUR)) +
     scale_color_manual(values = c("chocolate", "chartreuse4")) +
-    scale_size_continuous(range = c(1, 10)) +
+    scale_size_continuous(range = c(0.5, 6)) +
     coord_equal() + theme_nothing()
   return(popPlot)
 }
@@ -161,7 +171,7 @@ PlotOneSampleComp <- function(df, sampone, val){
     geom_point(data = df, aes(X, Y, size = TAILLE), color = "grey70") +
     geom_point(data = df[sampIndex, ], aes(X, Y, size = TAILLE, color = COULEUR)) +
     scale_color_manual(values = c("chocolate", "chartreuse4")) +
-    scale_size_continuous(range = c(1, 10)) +
+    scale_size_continuous(range = c(0.5, 6)) +
     coord_equal() + theme_nothing()
   return(sampPlot)
 }
@@ -316,7 +326,7 @@ ShowDataTableChi <- function(val){
 
 PlotPopChi <- function(df){
   popPlot <- ggplot(df) + 
-    geom_point(aes(X, Y, shape = FORME, color = COULEUR), size = 3) +
+    geom_point(aes(X, Y, shape = FORME, color = COULEUR), size = 4) +
     scale_color_manual(values = c("chocolate", "chartreuse4")) +
     coord_equal() + theme_nothing()
   return(popPlot)
@@ -324,8 +334,8 @@ PlotPopChi <- function(df){
 
 PlotOneSampleChi <- function(df, sampone){
   sampPlot <- ggplot() + 
-    geom_point(data = df, aes(X, Y, shape = FORME), color = "grey70", size = 3) +
-    geom_point(data = df[sampone, ], aes(X, Y, shape = FORME, color = COULEUR), size = 3) +
+    geom_point(data = df, aes(X, Y, shape = FORME), color = "grey70", size = 4) +
+    geom_point(data = df[sampone, ], aes(X, Y, shape = FORME, color = COULEUR), size = 4) +
     scale_color_manual(values = c("chocolate", "chartreuse4")) +
     coord_equal() + theme_nothing()
   return(sampPlot)

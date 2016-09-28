@@ -20,11 +20,11 @@ shinyServer(function(session, input, output) {
   )
   
   observe({
-    baseData$tailleval <- c(rnorm(n = 500, mean = 100, sd = input$varlevmean), rnorm(n = 500, mean = 100, sd = input$varlevmean))
+    baseData$tailleval <- c(ScaleRnorm(n = 500, mu = 100, sigma = input$varlevmean), ScaleRnorm(n = 500, mu = 100, sigma = input$varlevmean))
   })
   
   observe({
-    baseData$tailleval <- c(rnorm(n = 500, mean = 100, sd = input$varlevcomp), rnorm(n = 500, mean = 100, sd = input$varlevcomp))
+    baseData$tailleval <- c(ScaleRnorm(n = 500, mu = 100, sigma = input$varlevcomp), ScaleRnorm(n = 500, mu = 100, sigma = input$varlevcomp))
   })
   
   oneSampleMean <- eventReactive(input$getonemean, {

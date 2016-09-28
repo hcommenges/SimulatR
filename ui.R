@@ -1,5 +1,5 @@
 shinyUI(fluidPage(
-  #theme = shinytheme("united"),
+  theme = shinytheme("united"),
   titlePanel("SimulatR - Simuler les situations d'inférence",
              tags$head(tags$link(rel = "icon", type = "image/png", href = "favicon.png"),
                        tags$title("SimulatR - Simuler les situations d'inférence"))
@@ -10,14 +10,15 @@ shinyUI(fluidPage(
     # Guide ----
     
     tabPanel("Guide d'utilisation", 
-             fluidRow(column(2, wellPanel()),
-                      column(10, includeMarkdown("README_app.md")))),
+             fluidRow(column(2),
+                      column(7, includeMarkdown("README_app.md")),
+                      column(3))),
     tabPanel("Estimation d'une moyenne",
              fluidRow(column(12,
                              fluidRow(column(3,
                                              sliderInput("varlevmean", label = "Variabilité (écart-type)", min = 0, max = 20, value = 10, step = 1)),
                                       column(3,
-                                             sliderInput("sampsizemean", label = "Taille de l'échantillon", min = 10, max = 1000, value = 100, step = 1)),
+                                             sliderInput("sampsizemean", label = "Taille de l'échantillon", min = 10, max = 999, value = 100, step = 1)),
                                       column(1,
                                              actionButton("getonemean", label = "1 tirage")),
                                       column(1, 
@@ -40,7 +41,7 @@ shinyUI(fluidPage(
                              fluidRow(column(3,
                                              sliderInput("varlevcomp", label = "Variabilité (écart-type)", min = 0, max = 20, value = 10, step = 1)),
                                       column(3,
-                                             sliderInput("sampsizecomp", label = "Taille de l'échantillon", min = 10, max = 1000, value = 100, step = 1)),
+                                             sliderInput("sampsizecomp", label = "Taille de l'échantillon", min = 10, max = 999, value = 100, step = 1)),
                                       column(1,
                                              actionButton("getonecomp", label = "1 tirage")),
                                       column(1, 
@@ -61,7 +62,7 @@ shinyUI(fluidPage(
     tabPanel("Contingence",
              fluidRow(column(12,
                              fluidRow(column(6,
-                                             sliderInput("sampsizechi", label = "Taille de l'échantillon", min = 10, max = 1000, value = 100, step = 1, width = "80%")),
+                                             sliderInput("sampsizechi", label = "Taille de l'échantillon", min = 10, max = 999, value = 100, step = 1, width = "80%")),
                                       column(1,
                                              actionButton("getonechi", label = "1 tirage")),
                                       column(1, 
