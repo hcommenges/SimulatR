@@ -20,11 +20,11 @@ shinyServer(function(session, input, output) {
   )
   
   observe({
-    baseData$tailleval <- c(ScaleRnorm(n = 500, mu = 100, sigma = input$varlevmean), ScaleRnorm(n = 500, mu = 100, sigma = input$varlevmean))
+    baseData$tailleval <- c(rnorm(n = 500, mean = 100, sd = input$varlevmean), rnorm(n = 500, mean = 100, sd = input$varlevmean))
   })
   
   observe({
-    baseData$tailleval <- c(ScaleRnorm(n = 500, mu = 100, sigma = input$varlevcomp), ScaleRnorm(n = 500, mu = 100, sigma = input$varlevcomp))
+    baseData$tailleval <- c(rnorm(n = 500, mean = 100, sd = input$varlevcomp), rnorm(n = 500, mean = 100, sd = input$varlevcomp))
   })
   
   oneSampleMean <- eventReactive(input$getonemean, {
@@ -66,6 +66,40 @@ shinyServer(function(session, input, output) {
       PlotMeanDistrib(baseData$meanval, levalpha = input$levalphamean, mu = mean(baseData$tailleval), sigma = input$varlevmean, sampsize = input$sampsizemean)
     })
   
+  
+  # poisson distribution ----
+  
+  oneSamplePoiss <- eventReactive(input$getonepoiss, {
+    GetOneSamplePoiss(df = dfExample, sampsize = input$sampsizepoiss)
+  })
+  
+  output$plotpoppoiss <- renderPlot(
+    if(input$getonepoiss == 0){
+      PlotPopPoiss(df = dfExample)
+    } else {
+      oneSamplePoiss()$PLOT
+    }
+  )
+  
+  output$contpoiss <- renderTable(include.rownames = FALSE, expr = {
+    if(input$getonepoiss > 0){
+      oneSamplePoiss()$CONT
+    }
+  }
+  )
+  
+  output$summarypoiss <- renderText(
+    if(input$getonepoiss > 0){
+      varMean <- paste("Moyenne = ", round(oneSamplePoiss()$MEAN, 3), "<br/>", "Variance =", round(oneSamplePoiss()$VARIANCE, 3), sep = "")
+    }
+  )
+  
+  output$probapoiss <- renderTable(include.rownames = FALSE, expr = {
+    if(input$getonepoiss > 0){
+      ProbaPoisson(obsmean = oneSamplePoiss()$MEAN, lengthvec = nrow(dfExample))
+    }
+  }
+  )
   
   # mean comparison ----
   
@@ -178,6 +212,8 @@ shinyServer(function(session, input, output) {
     if(length(baseData$chival > 0)){
       PlotChiDistrib(baseData$chival, levalpha = input$levalphachi)
     })
+  
+  
   
   
 })

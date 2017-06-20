@@ -27,15 +27,6 @@ theme_nothing <- function(base_size = 12, base_family = "Helvetica"){
 }
 
 
-ScaleRnorm <- function(n, mu, sigma){
-  x <- rnorm(n = n, mean = mu, sd = sigma)
-  xDisp <- sigma * x / sd(x)
-  xScaled <- xDisp - mean(xDisp) + mu
-  return(xScaled)
-}
-
-
-
 # mean estimation ----
 
 GetOneSampleMean <- function(df, sampsize, val){
@@ -69,7 +60,7 @@ PlotPopMean <- function(df){
   popPlot <- ggplot(df) + 
     geom_point(aes(X, Y, size = TAILLE), color = "firebrick") +
     #scale_color_manual(values = c("chocolate", "chartreuse4")) +
-    scale_size_continuous(range = c(0.5, 6)) +
+    scale_size_continuous(range = c(1, 10)) +
     coord_equal() + theme_nothing()
   return(popPlot)
 }
@@ -79,7 +70,7 @@ PlotOneSampleMean <- function(df, sampone, val){
   sampPlot <- ggplot() + 
     geom_point(data = df, aes(X, Y, size = TAILLE), color = "grey70") +
     geom_point(data = df[sampone, ], aes(X, Y, size = TAILLE), color = "firebrick") +
-    scale_size_continuous(range = c(0.5, 6)) +
+    scale_size_continuous(range = c(1, 10)) +
     coord_equal() + theme_nothing()
   return(sampPlot)
 }
@@ -153,13 +144,71 @@ PlotMeanDistrib <- function(meanvalues, levalpha, mu, sigma, sampsize){
 }
 
 
+# Poisson ----
+
+GetOneSamplePoiss <- function(df, sampsize){
+  sampIndex <- sample(x = 1:1000, size = sampsize, replace = TRUE)
+  countOccur <- data.frame(ID = sampIndex) %>% 
+    group_by(ID) %>% 
+    summarise(NOCC = n())
+  
+  tabTot <- df %>% left_join(x = ., y = countOccur, by = "ID")
+  tabTot$NOCC <- ifelse(is.na(tabTot$NOCC), 0, tabTot$NOCC)
+  tabTot$BOOLOCC <- ifelse(tabTot$NOCC == 0, 0, 1)
+  
+  tabCont <- tabTot %>% 
+    group_by(NOCC) %>% 
+    summarise(FREQ = n()) %>% 
+    mutate(FREQREL = FREQ / sum(FREQ))
+  colnames(tabCont) <- c("Occurrences", "Fréquence", "Fréq. relative")
+  
+  meanOcc <- mean(tabTot$NOCC)
+  varOcc <- var(tabTot$NOCC)
+  
+  poissPlot <- ggplot(tabTot) + 
+    geom_point(aes(X, Y, size = NOCC, color = BOOLOCC)) +
+    scale_color_manual(values = c("grey50", "chocolate")) +
+    scale_size_discrete() +
+    coord_equal() + theme_nothing()
+  
+  
+  poissPlot <- ggplot(tabTot) + 
+    geom_point(aes(X, Y, size = NOCC, color = factor(BOOLOCC))) +
+    scale_color_manual(values = c("grey50", "chocolate")) +
+    scale_size_continuous(range = c(1, 10)) +
+    coord_equal() + theme_nothing()
+  
+  return(list(MEAN = meanOcc, VARIANCE = varOcc, CONT = tabCont, PLOT = poissPlot))
+}
+
+
+ProbaPoisson <- function(obsmean, lengthvec){
+  maxX <- round(qpois(p = 0.999, lambda = obsmean), digits = 2)
+  seqValues <- seq(0, maxX, 1)
+  seqProba <- dpois(x = seqValues, lambda = obsmean)
+  
+  tabProb <- data.frame(seqValues, seqProba)
+  tabProb$NEST <- round(lengthvec * tabProb$seqProba, digits = 0)
+  colnames(tabProb) <- c("Occurrences", "Probabilité", "Fréq. espérée")
+  
+  return(tabProb)
+}
+
+PlotPopPoiss <- function(df){
+  popPlot <- ggplot(df) + 
+    geom_point(aes(X, Y), size = 2, color = "grey50") +
+    coord_equal() + theme_nothing()
+  return(popPlot)
+}
+
+
 # Mean comparison ---- 
 
 PlotPopComp <- function(df){
   popPlot <- ggplot(df) + 
     geom_point(aes(X, Y, size = TAILLE, color = COULEUR)) +
     scale_color_manual(values = c("chocolate", "chartreuse4")) +
-    scale_size_continuous(range = c(0.5, 6)) +
+    scale_size_continuous(range = c(1, 10)) +
     coord_equal() + theme_nothing()
   return(popPlot)
 }
@@ -171,7 +220,7 @@ PlotOneSampleComp <- function(df, sampone, val){
     geom_point(data = df, aes(X, Y, size = TAILLE), color = "grey70") +
     geom_point(data = df[sampIndex, ], aes(X, Y, size = TAILLE, color = COULEUR)) +
     scale_color_manual(values = c("chocolate", "chartreuse4")) +
-    scale_size_continuous(range = c(0.5, 6)) +
+    scale_size_continuous(range = c(1, 10)) +
     coord_equal() + theme_nothing()
   return(sampPlot)
 }
@@ -326,7 +375,7 @@ ShowDataTableChi <- function(val){
 
 PlotPopChi <- function(df){
   popPlot <- ggplot(df) + 
-    geom_point(aes(X, Y, shape = FORME, color = COULEUR), size = 4) +
+    geom_point(aes(X, Y, shape = FORME, color = COULEUR), size = 3) +
     scale_color_manual(values = c("chocolate", "chartreuse4")) +
     coord_equal() + theme_nothing()
   return(popPlot)
@@ -334,8 +383,8 @@ PlotPopChi <- function(df){
 
 PlotOneSampleChi <- function(df, sampone){
   sampPlot <- ggplot() + 
-    geom_point(data = df, aes(X, Y, shape = FORME), color = "grey70", size = 4) +
-    geom_point(data = df[sampone, ], aes(X, Y, shape = FORME, color = COULEUR), size = 4) +
+    geom_point(data = df, aes(X, Y, shape = FORME), color = "grey70", size = 3) +
+    geom_point(data = df[sampone, ], aes(X, Y, shape = FORME, color = COULEUR), size = 3) +
     scale_color_manual(values = c("chocolate", "chartreuse4")) +
     coord_equal() + theme_nothing()
   return(sampPlot)
@@ -372,6 +421,4 @@ PlotMosaic <- function(varx, vary, df){
   valLabs <- round(tabCont, 0)
   mosaic(tabCont)
 }
-
-
 
