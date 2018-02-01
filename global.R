@@ -243,8 +243,8 @@ PlotHistComp <- function(df, sel, val){
 
 GetOneSampleComp <- function(df, sampsize, val){
   df$TAILLE <- val
-  sampIndex1 <- sample(x = 1:500, size = sampsize, replace = FALSE)
-  sampIndex2 <- sample(x = 501:1000, size = sampsize, replace = FALSE)
+  sampIndex1 <- sample(x = 1:1000, size = sampsize, replace = FALSE)
+  sampIndex2 <- sample(x = 1:1000, size = sampsize, replace = FALSE)
   oneSamp1 <- df[sampIndex1, "TAILLE"]
   oneSamp2 <- df[sampIndex2, "TAILLE"]
   tVal <- t.test(x = oneSamp1, y = oneSamp2, paired = FALSE, var.equal = TRUE)$statistic
@@ -255,8 +255,8 @@ GetTenSampleComp <- function(df, sampsize, val){
   df$TAILLE <- val
   tList <- vector()
   for(i in 1:10){
-    sampIndex1 <- sample(x = 1:500, size = sampsize, replace = FALSE)
-    sampIndex2 <- sample(x = 501:1000, size = sampsize, replace = FALSE)
+    sampIndex1 <- sample(x = 1:1000, size = sampsize, replace = FALSE)
+    sampIndex2 <- sample(x = 1:1000, size = sampsize, replace = FALSE)
     oneSamp1 <- df[sampIndex1, "TAILLE"]
     oneSamp2 <- df[sampIndex2, "TAILLE"]
     tVal <- t.test(x = oneSamp1, y = oneSamp2, paired = FALSE, var.equal = TRUE)$statistic
@@ -269,8 +269,8 @@ GetHundredSampleComp <- function(df, sampsize, val){
   df$TAILLE <- val
   tList <- vector()
   for(i in 1:100){
-    sampIndex1 <- sample(x = 1:500, size = sampsize, replace = FALSE)
-    sampIndex2 <- sample(x = 501:1000, size = sampsize, replace = FALSE)
+    sampIndex1 <- sample(x = 1:1000, size = sampsize, replace = FALSE)
+    sampIndex2 <- sample(x = 1:1000, size = sampsize, replace = FALSE)
     oneSamp1 <- df[sampIndex1, "TAILLE"]
     oneSamp2 <- df[sampIndex2, "TAILLE"]
     tVal <- t.test(x = oneSamp1, y = oneSamp2, paired = FALSE, var.equal = TRUE)$statistic
